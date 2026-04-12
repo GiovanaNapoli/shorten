@@ -41,7 +41,11 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test
+        run: |
+          export MONGO_URI="${{ MONGO_URI }}"
+          export ENVIRONMENT="${ENVIRONMENT}"
+          export SHUFFLE_SECRET="${SHUFFLE_SECRET}"
+          npm test
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}

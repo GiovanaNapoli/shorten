@@ -41,6 +41,6 @@ jobs:
       - name: Run tests
         run: npm test
         env:
-          MONGO_URI: mongodb://root:root@localhost:27017/shorten_url_test?authSource=admin
-          ENVIRONMENT: test
-          SHUFFLE_SECRET: 0x5f3759df
+          MONGO_URI: ${{secrets.MONGO_URI}}
+          ENVIRONMENT: ${{secrets.ENVIRONMENT}}
+          SHUFFLE_SECRET: ${{secrets.SHUFFLE_SECRET}}

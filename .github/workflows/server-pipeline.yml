@@ -9,6 +9,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: server
 
     services:
       mongodb:
@@ -16,7 +19,7 @@ jobs:
         env:
           MONGO_INITDB_ROOT_USERNAME: root
           MONGO_INITDB_ROOT_PASSWORD: root
-          MONGO_INITDB_DATABASE: shorten_url_test
+          MONGO_INITDB_DATABASE: shorten_url
         options: >-
           --health-cmd mongosh
           --health-interval 10s
@@ -34,16 +37,11 @@ jobs:
         with:
           node-version: 24
 
-      - name: Install dependencies and run tests
-        run: |
-          if [ -d server ]; then
-            cd server
-          fi
-          npm ci
-          MONGO_URI=${MONGO_URI:-mongodb://root:root@localhost:27017/shorten_url_test?authSource=admin} \
-          ENVIRONMENT=${ENVIRONMENT:-test} \
-          SHUFFLE_SECRET=${SHUFFLE_SECRET:-0x5f3759df} \
-          npm test
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
           ENVIRONMENT: ${{ secrets.ENVIRONMENT }}

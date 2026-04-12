@@ -1,4 +1,5 @@
 name: server pipeline
+
 on:
   push:
     branches: [main]
@@ -8,9 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: server
+
     services:
       mongodb:
         image: mongo:8
@@ -28,19 +27,24 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node.js 24
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v4
         with:
           node-version: 24
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+      - name: Install dependencies and run tests
+        run: |
+          if [ -d server ]; then
+            cd server
+          fi
+          npm ci
+          MONGO_URI=${MONGO_URI:-mongodb://root:root@localhost:27017/shorten_url_test?authSource=admin} \
+          ENVIRONMENT=${ENVIRONMENT:-test} \
+          SHUFFLE_SECRET=${SHUFFLE_SECRET:-0x5f3759df} \
+          npm test
         env:
-          MONGO_URI: ${{secrets.MONGO_URI}}
-          ENVIRONMENT: ${{secrets.ENVIRONMENT}}
-          SHUFFLE_SECRET: ${{secrets.SHUFFLE_SECRET}}
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
+          SHUFFLE_SECRET: ${{ secrets.SHUFFLE_SECRET }}

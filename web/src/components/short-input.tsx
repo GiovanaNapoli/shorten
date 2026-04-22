@@ -1,7 +1,7 @@
 import { ArrowRightLeft, LinkIcon } from "lucide-react";
 import Button from "./ui/button";
 
-export function ShortInput() {
+export function ShortInput({ onShorten }: { onShorten: () => void }) {
   return (
     <div className="w-full max-w-2xl rounded-xl bg-cyan-200/40 p-4">
       <div className="flex items-center gap-2 rounded-lg bg-white px-2 py-1">
@@ -22,6 +22,7 @@ export function ShortInput() {
           icon={<ArrowRightLeft size={14} />}
           size="md"
           className="arvo-bold border-none bg-linear-to-r from-cyan-300/40 to-blue-400/40 hover:from-cyan-400/40 hover:to-blue-500/40"
+          onClick={onShorten}
         />
       </div>
     </div>

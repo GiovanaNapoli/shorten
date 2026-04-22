@@ -1,13 +1,20 @@
+import { useState } from "react";
 import { ShortInput } from "./components/short-input";
+import ShortedUrlCard from "./components/shorted-url-card";
+import Section from "./components/ui/section";
 
 function App() {
+  const [shortedUrl, setShortedUrl] = useState<string | null>(null);
+  const handleShorten = () => {
+    setShortedUrl(`https://short.ly/${Math.random().toString(36).substring(2, 8)}`);
+  };
   return (
     <>
       <main className="min-h-screen relative overflow-hidden">
         <div className="glow-orb-primary -top-48 -left-48" />
         <div className="glow-orb-accent -bottom-32 -right-32" />
 
-        <section className="max-w-6xl mx-auto text-center flex flex-col items-center justify-center gap-6 py-20 px-4">
+        <Section>
           <h1 className="arvo-bold text-2xl md:text-3xl font-bold font-display tracking-tight leading-tight mb-4">
             Create Your{" "}
             <span className="relative inline-block px-2">
@@ -17,13 +24,15 @@ function App() {
             Link
           </h1>
 
-          <ShortInput />
-        </section>
+          <ShortInput onShorten={handleShorten} />
+          {shortedUrl && <ShortedUrlCard url={shortedUrl} />}
+        </Section>
+        <Section>
+          <h2 className="arvo-bold text-xl md:text-2xl font-bold font-display tracking-tight leading-tight mb-4">
+            Hitory of Shorted Links
+          </h2>
+        </Section>
       </main>
-
-      {/* <Button icon={<CopyIcon size={16} />} text="Copy" />
-      <Button icon={<ChartLineIcon size={16} />} text="Statistics" />
-      <Button icon={<ShareIcon size={16} />} text="Share" /> */}
     </>
   );
 }

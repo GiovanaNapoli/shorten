@@ -1,4 +1,5 @@
 import { fastify } from 'fastify';
+import fastifyCors from '@fastify/cors';
 import {
     type ZodTypeProvider,
     jsonSchemaTransform,
@@ -11,6 +12,7 @@ import { env } from './env';
 import registerMongo from "./database/mongo.ts";
 import { shortUrl } from './routes/short-url';
 import { getShortedUrl } from './routes/get-shorted-url';
+import { listUrls } from './routes/list-urls';
 
 const server = fastify({
   logger: {
@@ -47,9 +49,17 @@ if (env.ENVIRONMENT === "development") {
 server.setValidatorCompiler(validatorCompiler);
 server.setSerializerCompiler(serializerCompiler);
 
+server.register(fastifyCors, {
+  origin: env.ENVIRONMENT === "development"
+    ? ["http://localhost:5173", "http://127.0.0.1:5173"]
+    : false,
+  methods: ["GET", "POST", "OPTIONS"],
+});
+
 // register database and routes
 server.register(registerMongo);
 server.register(shortUrl);
 server.register(getShortedUrl);
+server.register(listUrls);
 
 export { server }

@@ -1,7 +1,9 @@
 import { ArrowRightLeft, LinkIcon } from "lucide-react";
 import Button from "./ui/button";
+import { useState } from "react";
 
-export function ShortInput({ onShorten }: { onShorten: () => void }) {
+export function ShortInput({ onShorten }: { onShorten: (longUrl: string) => void }) {
+  const [inputValue, setInputValue] = useState("");
   return (
     <div className="w-full max-w-2xl rounded-xl bg-cyan-200/40 p-4">
       <div className="flex items-center gap-2 rounded-lg bg-white px-2 py-1">
@@ -14,6 +16,8 @@ export function ShortInput({ onShorten }: { onShorten: () => void }) {
           type="text"
           placeholder="Enter your URL here"
           className="flex-1 bg-transparent text-sm text-zinc-700 placeholder:text-zinc-400 outline-none"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
 
         <Button
@@ -22,7 +26,7 @@ export function ShortInput({ onShorten }: { onShorten: () => void }) {
           icon={<ArrowRightLeft size={14} />}
           size="md"
           className="arvo-bold border-none bg-linear-to-r from-cyan-300/40 to-blue-400/40 hover:from-cyan-400/40 hover:to-blue-500/40"
-          onClick={onShorten}
+          onClick={() => onShorten(inputValue)}
         />
       </div>
     </div>

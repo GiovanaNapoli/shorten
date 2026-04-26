@@ -8,11 +8,11 @@ export default defineConfig({
   test: {
     // Pass loaded environment variables to vitest
     env: {
-      MONGO_URI: process.env.MONGO_URI!,
-      ENVIRONMENT: process.env.ENVIRONMENT!,
-      SHUFFLE_SECRET: process.env.SHUFFLE_SECRET!,
-      BASE_URL: process.env.BASE_URL!,
-      PORT: process.env.PORT!,
+      MONGO_URI: process.env.MONGO_URI,
+      ENVIRONMENT: process.env.ENVIRONMENT,
+      SHUFFLE_SECRET: process.env.SHUFFLE_SECRET,
+      BASE_URL: process.env.BASE_URL,
+      PORT: process.env.PORT,
     }
   }
 })

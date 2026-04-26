@@ -3,6 +3,7 @@ import z from "zod";
 import { Url } from "../models/url-schema";
 import { encode, objectIdToNumber } from "../utils/crypto.ts";
 import { ObjectId } from "mongodb";
+import { env } from "../env.ts";
 
 export const shortUrl: FastifyPluginAsyncZod = async (server) => {
   server.post(
@@ -40,7 +41,7 @@ export const shortUrl: FastifyPluginAsyncZod = async (server) => {
       const newUrl: Url = { _id, longUrl, shortCode, createdAt: new Date() };
       await server.mongo.db.collection("urls").insertOne(newUrl);
       return reply.status(201).send({
-        shortUrl: `${request.protocol}://${request.hostname}:${request.port}/${shortCode}`,
+        shortUrl: `${env.BASE_URL}/${shortCode}`,
       });
     },
   );

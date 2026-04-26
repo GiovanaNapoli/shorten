@@ -1,6 +1,6 @@
-﻿import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3333";
 
 export interface HistoryItem {
   longUrl: string;
@@ -22,7 +22,7 @@ export function useHistory(page: number = 1, limit: number = 10) {
     queryKey: ["history", page, limit],
     queryFn: async () => {
       const response = await fetch(
-        `${BASE_URL}/history?page=${page}&limit=${limit}`
+        `${API_URL}/history?page=${page}&limit=${limit}`
       );
       if (!response.ok) {
         throw new Error("Failed to fetch history");

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "dotenv -e .env -- tsx watch src/server.ts",
-    "start": "tsx src/server.ts",
+    "build": "tsc --noEmit false",
+    "start": "node dist/server.js",
+    "start:dev": "tsx src/server.ts",
     "test": "dotenv -e .env.test -- vitest run"
   },
   "keywords": [],

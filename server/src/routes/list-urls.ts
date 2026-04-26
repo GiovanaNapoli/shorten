@@ -1,5 +1,6 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
 import z from "zod";
+import { env } from "../env.ts";
 
 export const listUrls: FastifyPluginAsyncZod = async (server) => {
   server.get(
@@ -55,7 +56,7 @@ export const listUrls: FastifyPluginAsyncZod = async (server) => {
       // Build items with complete shortUrl
       const items = urls.map((url) => ({
         longUrl: url.longUrl,
-        shortUrl: `${request.protocol}://${request.hostname}:${request.port}/${url.shortCode}`,
+        shortUrl: `${env.BASE_URL}/${url.shortCode}`,
       }));
 
       return reply.status(200).send({

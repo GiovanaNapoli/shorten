@@ -74,19 +74,43 @@ server/
 
 ---
 
-## 🛠️ Variáveis de Ambiente (env.ts)
+## 🛠️ Variáveis de Ambiente
 
-Obrigatórias para rodar o servidor:
+### Backend (server/.env)
 
 ```env
-MONGO_URI=mongodb://root:root@localhost:27017/shorten_url?authSource=admin
-ENVIRONMENT=development|test|production
-SHUFFLE_SECRET=0x12345678
+# Database
+MONGO_URI=mongodb://root:root@localhost:27017/shorter_url?authSource=admin
+
+# Environment: development | test | production
+ENVIRONMENT=development
+
+# Secret for URL shuffling (hexadecimal)
+SHUFFLE_SECRET=0x5f3759df
+
+# Base URL for shortened links (without trailing slash)
+# In production, use your domain: https://yourdomain.com
+BASE_URL=http://localhost:3333
+
+# Server port
+PORT=3333
 ```
 
 - **MONGO_URI**: String de conexão MongoDB
 - **ENVIRONMENT**: Ativa Swagger em `development`
 - **SHUFFLE_SECRET**: Seed hexadecimal (32 bits) para o shuffle do slug
+- **BASE_URL**: URL base para os links encurtados (importante para produção)
+- **PORT**: Porta onde o servidor irá rodar
+
+### Frontend (web/.env)
+
+```env
+# API Base URL (backend server)
+# For production, use your deployed backend URL: https://api.yourdomain.com
+VITE_API_URL=http://localhost:3333
+```
+
+- **VITE_API_URL**: URL do backend para requisições da API
 
 ---
 
@@ -105,7 +129,7 @@ Request:
 Response (201):
 ```json
 {
-  "shortUrl": "http://localhost:3000/abc1234"
+  "shortUrl": "http://localhost:3333/abc1234"
 }
 ```
 
@@ -170,7 +194,7 @@ Pendente:
 
 Em desenvolvimento, acesse:
 ```
-http://localhost:3000/docs
+http://localhost:3333/docs
 ```
 
 *Powered by Scalar API Reference*
@@ -179,16 +203,101 @@ http://localhost:3000/docs
 
 ## 🚀 Como Rodar
 
+### Desenvolvimento Local
+
+#### Backend
+
 ```bash
-# 1. Instalar dependências
+# 1. Navegar para o diretório do servidor
 cd server
+
+# 2. Copiar arquivo de exemplo e configurar variáveis
+cp .env.example .env
+# Edite o .env conforme necessário
+
+# 3. Instalar dependências
 npm install
 
-# 2. Iniciar MongoDB (Docker)
+# 4. Iniciar MongoDB (Docker)
 docker compose up -d
 
-# 3. Rodar servidor
-npm run dev  # (configure este script se necessário)
+# 5. Rodar servidor em modo desenvolvimento
+npm run dev
 
-# Servidor estará em http://localhost:3000
+# Servidor estará em http://localhost:3333
+# Documentação da API: http://localhost:3333/docs
 ```
+
+#### Frontend
+
+```bash
+# 1. Navegar para o diretório web
+cd web
+
+# 2. Copiar arquivo de exemplo e configurar variáveis
+cp .env.example .env
+# O padrão já aponta para http://localhost:3333
+
+# 3. Instalar dependências
+npm install
+
+# 4. Rodar em modo desenvolvimento
+npm run dev
+
+# Aplicação estará em http://localhost:5173
+```
+
+### Produção
+
+#### Backend
+
+```bash
+# 1. Configurar variáveis de ambiente de produção
+# Edite .env com:
+# - BASE_URL com seu domínio (ex: https://short.ly)
+# - MONGO_URI com banco de produção
+# - ENVIRONMENT=production
+
+# 2. Instalar dependências
+npm install --production
+
+# 3. Compilar TypeScript (opcional, mas recomendado)
+npm run build
+
+# 4. Rodar servidor compilado
+npm start
+
+# Ou usar tsx diretamente (desenvolvimento)
+npm run start:dev
+```
+
+#### Frontend
+
+```bash
+# 1. Configurar variáveis de ambiente de produção
+# Edite .env com:
+# - VITE_API_URL com a URL do seu backend (ex: https://api.yourdomain.com)
+
+# 2. Instalar dependências
+npm install
+
+# 3. Build para produção
+npm run build
+
+# 4. Os arquivos estarão em dist/ prontos para deploy
+# Pode usar serviços como Vercel, Netlify, ou servir com nginx
+```
+
+### Scripts Disponíveis
+
+#### Backend
+- `npm run dev` - Modo desenvolvimento com hot reload
+- `npm run build` - Compila TypeScript para JavaScript
+- `npm start` - Roda versão compilada (produção)
+- `npm run start:dev` - Roda com tsx (sem compilação)
+- `npm test` - Executa testes
+
+#### Frontend
+- `npm run dev` - Modo desenvolvimento
+- `npm run build` - Build para produção
+- `npm run preview` - Preview do build de produção

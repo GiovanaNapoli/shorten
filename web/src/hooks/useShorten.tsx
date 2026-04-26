@@ -1,13 +1,13 @@
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || "http://localhost:3000";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3333";
 
 export function useShorten() {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: async (longUrl: string) => fetch(`${BASE_URL}/short`, {
+    mutationFn: async (longUrl: string) => fetch(`${API_URL}/short`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -20,6 +20,8 @@
     "moduleResolution": "node16",
 
     "allowImportingTsExtensions": true,
-    "noEmit": true
+    "noEmit": true,
+    "outDir": "./dist",
+    "rootDir": "./src"
   }
 }

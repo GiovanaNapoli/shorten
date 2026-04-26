@@ -1,0 +1,32 @@
+name: Deploy Web
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ "web/**" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - run: npm ci
+        working-directory: web
+
+      - run: npm run build
+        working-directory: web
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+
+      - uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.WEB_ORG_ID }}
+          vercel-project-id: ${{ secrets.PROJECT_WEB_ID }}
+          working-directory: web
+          vercel-args: "--prod"

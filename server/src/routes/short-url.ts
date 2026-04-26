@@ -40,8 +40,9 @@ export const shortUrl: FastifyPluginAsyncZod = async (server) => {
       const shortCode = encode(objectIdToNumber(_id));
       const newUrl: Url = { _id, longUrl, shortCode, createdAt: new Date() };
       await server.mongo.db.collection("urls").insertOne(newUrl);
+      const shortUrl = `${env.BASE_URL}/${shortCode}`;
       return reply.status(201).send({
-        shortUrl: `${env.BASE_URL}/${shortCode}`,
+        shortUrl,
       });
     },
   );
